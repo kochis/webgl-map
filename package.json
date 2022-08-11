@@ -1,0 +1,34 @@
+{
+  "name": "webgl-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kochis/webgl-map.git"
+  },
+  "keywords": [
+    "webgl",
+    "vector",
+    "map"
+  ],
+  "author": "Craig Kochis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kochis/webgl-map/issues"
+  },
+  "homepage": "https://github.com/kochis/webgl-map#readme",
+  "dependencies": {
+    "@mapbox/tilebelt": "^1.0.2",
+    "@mapbox/vector-tile": "^1.3.1",
+    "axios": "^0.27.2",
+    "earcut": "^2.2.4",
+    "gl-matrix": "^3.4.3",
+    "hammerjs": "^2.0.8",
+    "pbf": "^3.2.1",
+    "stats.js": "^0.17.0"
+  }
+}
