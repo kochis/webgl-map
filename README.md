@@ -3,7 +3,7 @@
 
 ### [See Demo](https://ckochis.com/webgl-map-demo)
 
-This repo contains the code that accompanies the [Build a WebGL Vector Map](https://ckochis.com/build-a-webgl-vector-map-from-scratch) tutorial.
+This repo contains the code that accompanies the [Build a WebGL Vector Map](https://ckochis.com/build-a-vector-map-from-scratch) tutorial.
 
 It's pirmarily used as an exercise in learning WebGL and rendering Vector Tiles. Any comments or suggestions are more than welcome 😄
 
