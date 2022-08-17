@@ -216,6 +216,27 @@ class WebGLMap {
     });
   }
 
+  // if current tile is not loaded, just render scaled versions of parent or children
+  getBackupTile = (tile) => {
+    // use parent if available
+    const parent = tilebelt.getParent(tile)?.join('/');
+    const parentFeatureSet = this.tiles[parent];
+    if (parentFeatureSet?.length > 0) {
+      return parentFeatureSet;
+    }
+
+    // use whatever children are available
+    const childFeatureSets = [];
+    const children = (tilebelt.getChildren(tile) || []).map(t => t.join('/'));
+    children.forEach((child) => {
+      const featureSet = this.tiles[child];
+      if (featureSet?.length > 0) {
+        childFeatureSets.push(...featureSet);
+      }
+    });
+    return childFeatureSets;
+  }
+
   // update tiles with data from worker
   handleTileWorker = (workerEvent) => {
     const { tile, tileData } = workerEvent.data;
@@ -450,7 +471,11 @@ class WebGLMap {
 
     // render tiles
     tilesInView.forEach((tile) => {
-      const featureSets = tiles[tile.join('/')];
+      let featureSets = tiles[tile.join('/')];
+
+      if (featureSets?.length === 0) {
+        featureSets = this.getBackupTile(tile);
+      }
 
       (featureSets || []).forEach((featureSet) => {
         const { layer, type, vertices } = featureSet;
