@@ -169,8 +169,10 @@ class WebGLMap {
     for (let bufX = minX - tileBuffer; bufX <= maxX + tileBuffer; bufX++) {
       for (let bufY = minY - tileBuffer; bufY <= maxY + tileBuffer; bufY++) {
         this.bufferedTiles.push([bufX, bufY, z]);
-        this.bufferedTiles.push(...tilebelt.getChildren([bufX, bufY, z]));
+
+        // get parents 2 levels up
         this.bufferedTiles.push(tilebelt.getParent([bufX, bufY, z]));
+        this.bufferedTiles.push(tilebelt.getParent(tilebelt.getParent([bufX, bufY, z])));
       }
     }
 
@@ -197,19 +199,12 @@ class WebGLMap {
     const { layers, tileServerURL: url } = this.mapOptions;
 
     // load tiles from tilerServer
-    tilesToLoad.forEach(async (tile) => {
+    tilesToLoad.forEach((tile) => {
       if (this.tiles[tile]) {
         return; // already loaded, no need to fetch
       }
       // temp hold for request
       this.tiles[tile] = [];
-
-      // tile is in main view, processes on the main thread for priority
-      // (note: not sure if this actually helps, or works as intneded)
-      if (inViewLookup.has(tile)) {
-        this.tiles[tile] = await fetchTile({ tile, layers, url });
-        return;
-      }
 
       // hand off buffered tiles to worker for fetching & processing
       this.tileWorker.postMessage({ tile, layers, url });
@@ -217,7 +212,7 @@ class WebGLMap {
   }
 
   // if current tile is not loaded, just render scaled versions of parent or children
-  getBackupTile = (tile) => {
+  getPlaceholderTile = (tile) => {
     // use parent if available
     const parent = tilebelt.getParent(tile)?.join('/');
     const parentFeatureSet = this.tiles[parent];
@@ -474,7 +469,7 @@ class WebGLMap {
       let featureSets = tiles[tile.join('/')];
 
       if (featureSets?.length === 0) {
-        featureSets = this.getBackupTile(tile);
+        featureSets = this.getPlaceholderTile(tile);
       }
 
       (featureSets || []).forEach((featureSet) => {
