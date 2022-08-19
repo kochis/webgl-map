@@ -109,6 +109,9 @@ class WebGLMap {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(program);
 
+    // create buffers
+    this.positionBuffer = gl.createBuffer();
+
     // save gl references
     this.gl = gl;
     this.program = program;
@@ -486,8 +489,7 @@ class WebGLMap {
         gl.uniform4fv(colorLocation, color);
 
         // create buffer for vertices
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
         // setup position attribute
@@ -527,10 +529,8 @@ class WebGLMap {
         const colorLocation = gl.getUniformLocation(program, "u_color");
         gl.uniform4fv(colorLocation, [1, 0, 0, 1]);
 
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
         const tileVertices = geometryToVertices(tilebelt.tileToGeoJSON(tile));
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, tileVertices, gl.STATIC_DRAW);
 
         // setup position attribute
