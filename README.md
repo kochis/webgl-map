@@ -17,7 +17,7 @@ const map = new WebGLMap({
   tileServerURL: 'https://maps.ckochis.com/data/v3/{z}/{x}/{y}.pbf',
   width: 800,
   height: 600,
-  center: [-73.9834558, 40.6932723]
+  center: [-73.9834558, 40.6932723],
   minZoom: 4,
   maxZoom: 18,
   zoom: 13,
